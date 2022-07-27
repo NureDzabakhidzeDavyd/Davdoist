@@ -1,19 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace DAL.Interfaces
 {
-    interface IRepository<T> where T : class
+    public interface IRepository<T> where T : class
     {
-        public T Read();
+        public IEnumerable<T> GetAll();
 
-        public void Delete(T instance);
+        public T GetById(int id);
 
-        public void Add(T instance);
+        public void Delete(int id);
 
-        public void Update();
+        public void Delete(T entity);
+
+        public void Add(T entity);
+
+        public void Update(int id);
     }
 }

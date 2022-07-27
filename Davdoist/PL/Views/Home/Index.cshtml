@@ -1,1 +1,13 @@
-﻿
+﻿@{
+    Layout = @"~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "ToDoist";
+}
+
+@model TaskAndFolder
+
+@section ToDoFolders{
+    @foreach (var item in Model.Folders)
+    {
+        <a class="dropdown-item" asp-controller="Folder" asp-action="ToDoTasks" asp-route-id="@item.Id">@item.Name</a>
+    }
+}

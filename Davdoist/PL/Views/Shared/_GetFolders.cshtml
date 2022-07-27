@@ -1,0 +1,5 @@
+﻿@model TaskAndFolder
+@foreach (var item in Model.Folders)
+{
+    <a class="dropdown-item" asp-controller="Folder" asp-action="ToDoTasks" asp-route-id="@item.Id">@item.Name</a>
+}

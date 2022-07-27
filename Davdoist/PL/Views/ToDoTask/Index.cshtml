@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "ToDoTask";
+}
+
+@model IEnumerable<ToDoTask>
+
+
+@foreach (var item in Model)
+{
+    <h3>@item.Header</h3>
+    <h3>@item.Date</h3>
+    <h3>@item.Description</h3>
+    <h3>@item.IsCompleted</h3>
+    <h3>@item.Priority</h3>
+}

@@ -1,13 +1,27 @@
-﻿@{
-    Layout = null;
-}
-<!DOCTYPE html>
-
+﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>_Layout</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="~/lib/twitter-bootstrap/js/bootstrap.js"></script>
+    <link href="~/lib/twitter-bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="~/css/site.css" />
+    <title>@ViewData["Title"]</title>
 </head>
 <body>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+        <div class="container-fluid">
+            <div class="navbar-brand p-1"><a href="#"><img src="~/img/ToDoistLogo.png" class="rounded" width="50" alt="ToDoist" /></a> </div>
+            <div class="nav-item dropdown">
+                <button class="dropdown-toggle btn btn-dark" role="button" data-bs-toggle="dropdown">Folders</button>
+                <div class="dropdown-menu">
+                    @RenderSection("ToDoFolders", false)
+                </div>
+            </div>
+        </div>
+
+    </nav>
+    <main class="container-fluid">
+                @RenderSection("ToDoTasks", false)
+    </main>
 </body>
 </html>

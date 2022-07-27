@@ -1,13 +1,5 @@
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PL
 {
@@ -16,6 +8,11 @@ namespace PL
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
+            services.AddAutoMapper(typeof(BLL.AppMappingProfile));
+
+            services.AddTransient<BLL.Interfaces.IBlTaskServicer, BLL.BL>();
+            services.AddTransient<BLL.Interfaces.IBlFolderServicer, BLL.BL>();
         }
 
         public void Configure(IApplicationBuilder app)

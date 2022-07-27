@@ -1,13 +1,9 @@
-﻿using DAL.Entities.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace DAL.Entities
 {
-    class ToDoTask
+    public class ToDoTask
     {
         public int Id { get; set; }
 
@@ -17,8 +13,21 @@ namespace DAL.Entities
 
         public string Description { get; set; } = null;
 
+        [DataType(DataType.Date)]
         public DateTime? Date { get; set; } = null;
 
         public Priority Priority { get; set; } = Priority.None;
+
+        // If folder doesn't exist - Inbox by default
+        public int FolderId { get; set; } 
+        public Folder Folder { get; set; } 
+    }
+
+    public enum Priority
+    {
+        None,
+        Low,
+        Media,
+        High
     }
 }
