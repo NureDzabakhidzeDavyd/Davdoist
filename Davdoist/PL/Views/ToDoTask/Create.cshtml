@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Create ToDoTask";
+}
+
+@model ToDoTask
+
+<div class="container-fluid">
+    <div class="row p-3">
+        <div class="col-sm">
+            <form asp-action="Create" asp-controller="ToDoTask">
+                <div class="row p-3">
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" placeholder="@Html.DisplayNameFor(task => task.Header)" />
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" placeholder="@Html.DisplayNameFor(task => task.Description)" />
+                    </div>
+                </div>
+                <div class="row p-3">
+                    <div class="col-sm-2 form-check">
+                        <input type="checkbox" value="" class="form-check-input form-check-50" id="IsCompleted" />
+                        <label class="form-check-label h4" for="IsCompleted">@Html.DisplayNameFor(task => task.IsCompleted)</label>
+                    </div>
+                    <div class="col-sm-5">
+                        <input type="date" class="form-control" min="@DateTime.Now.Year" max="@DateTime.MaxValue" />
+                    </div>
+                    <div class="col-sm-5">
+                        <select class="form-control" id="Priority">
+                            @foreach (Priority priority in (Priority[])Enum.GetValues(typeof(Priority)))
+                            {
+                                <option>@priority</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row p-3">
+                    <div class="col-sm">
+                        <button type="submit" class="btn btn-light btn-lg">Create task</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

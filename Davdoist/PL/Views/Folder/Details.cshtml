@@ -1,0 +1,64 @@
+﻿@model Folder
+
+@{
+    ViewData["Title"] = "Details";
+
+}
+<div class="container-fluid">
+    <div class="row">
+        @{
+            if (Model.Tasks.Count == 0)
+            {
+                <div class="col-sm-4 task position-absolute top-50 start-50 translate-middle text-center">
+                    <h2>Folder doesn&lsquo;t have any tasks</h2>
+                </div>
+            }
+        }
+        @foreach (var item in Model.Tasks)
+        {
+            <div class="col-sm-4 task position-relative">
+                <table class="table-responsive">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <h2>@item.Header</h2>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Description: @item.Description
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @item.Date.Value.ToShortDateString()
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="IsCompleted">Is completed</label>
+                                @{
+                                    if (item.IsCompleted)
+                                    {
+                                        <input type="checkbox" id="IsCompleted" name="IsCompleted" disabled />
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" id="IsCompleted" name="IsCompleted" disabled checked />
+
+                                    }
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @item.Priority
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <a asp-action="Edit" asp-controller="ToDoTask" class="btn btn-outline-secondary btn-lg position-absolute bottom-0 end-0" asp-route-folderId="@item.Id">Edit</a>
+            </div>
+        }
+    </div>
+</div>

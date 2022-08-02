@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Folder>
+
+@{
+    ViewData["Title"] = "Index";
+
+}
+<div class="container-fluid">
+
+    <div class="table-responsive ">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th scope="col">Edit folder</th>
+                    <th scope="col">Folder details</th>
+                    <th scope="col">Delete folder</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <th>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </th>
+                        <td>
+                            <a asp-action="AddOrEdit" class="btn btn-outline-primary" asp-route-folderId="@item.Id">Edit</a>
+                        </td>
+                        <td>
+                            <a asp-action="Details" class="btn btn-outline-info" asp-route-folderId="@item.Id">Details</a>
+                        </td>
+                        <td>
+                            <a asp-action="Delete" asp-controller="Folder" class="btn btn-outline-danger" asp-route-folderId="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

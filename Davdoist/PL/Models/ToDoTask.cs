@@ -7,28 +7,30 @@ namespace PL.Models
     {
         public int Id { get; set; }
 
+        [Display(Name = "Header")]
         public string Header { get; set; }
 
+        [Display(Name = "Is completed")]
         public bool IsCompleted { get; set; }
 
+        [Display(Name = "Description")]
         public string Description { get; set; } = null;
 
         [DataType(DataType.Date)]
+        [Display(Name = "DeadLine")]
         public DateTime? Date { get; set; } = null;
 
+        [Display(Name = "Priority")]
         public Priority Priority { get; set; } = Priority.None;
 
-        // If folder doesn't exist - Inbox by default
-        public int FolderId { get; set; }
-        public Folder Folder { get; set; }
-
+        public int? FolderId { get; set; }
     }
 
         public enum Priority
         {
             None,
             Low,
-            Media,
+            Medium,
             High
         }
 }

@@ -2,6 +2,7 @@
 using BLL.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using PL.Models;
 using System.Collections.Generic;
 
@@ -10,20 +11,24 @@ namespace PL.Controllers
 {
     public class FolderController : Controller
     {
-        private readonly IBlFolderServicer bl;
+        private readonly IBlFolderServicer blFolder;
+        private readonly IBlTaskServicer blTask;
         private readonly IMapper mapper;
 
-        public FolderController(IMapper mapper, IBlFolderServicer blServicer)
+        public FolderController(IMapper mapper, IBlFolderServicer blServicer, IBlTaskServicer blTaskServicer)
         {
-            bl = blServicer;
+            blFolder = blServicer;
+            blTask = blTaskServicer;
+
             this.mapper = mapper;
-            bl.Mapper = this.mapper;
+            blTask.Mapper = this.mapper;
+            blFolder.Mapper = this.mapper;
         }
 
         // GET: FoldersController
         public ActionResult Index()
         {
-            IEnumerable<Folder> folders = mapper.Map<IEnumerable<Folder>>(bl.GetFolders());
+            IEnumerable<Folder> folders = mapper.Map<IEnumerable<Folder>>(blFolder.GetFolders());
             return View(folders);
         }
 
@@ -35,7 +40,11 @@ namespace PL.Controllers
                 return NotFound();
             }
 
-            Folder folder = mapper.Map<Folder>(bl.GetFolderById((int)folderId));
+            Folder folder = mapper.Map<Folder>(blFolder.GetFolderById((int)folderId));
+
+            IEnumerable<ToDoTask> tasks = mapper.Map<IEnumerable<ToDoTask>>(blFolder.GetFolderTasks((int)folderId));
+
+            folder.Tasks = tasks.ToList();
 
             return View(folder);
         }
@@ -43,7 +52,8 @@ namespace PL.Controllers
         // GET: FoldersController/Create
         public ActionResult Create()
         {
-            return View();
+            IEnumerable<ToDoTask> tasks = mapper.Map<IEnumerable<ToDoTask>>(blTask.GetTasks());
+            return View(tasks);
         }
 
         // POST: FoldersController/Create
@@ -90,8 +100,8 @@ namespace PL.Controllers
                 return NotFound();
             }
 
-            int folderDelId = bl.GetFolderById((int)folderId).Id;
-            bl.DeleteFolder(folderDelId);
+            int folderDelId = blFolder.GetFolderById((int)folderId).Id;
+            blFolder.DeleteFolder(folderDelId);
 
             return View();
         }

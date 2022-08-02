@@ -8,8 +8,6 @@ namespace BLL.Interfaces
     {
         public IEnumerable<ToDoTask> GetTasks();
 
-        public IEnumerable<ToDoTask> GetFolderTasks(int folderId);
-
         public ToDoTask GetTaskById(int taskId);
 
         public void DeleteTask(int taskId);

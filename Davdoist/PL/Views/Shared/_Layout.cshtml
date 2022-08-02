@@ -2,26 +2,31 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="~/lib/twitter-bootstrap/js/bootstrap.js"></script>
     <link href="~/lib/twitter-bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <script src="~/lib/twitter-bootstrap/js/bootstrap.js"></script>
     <link rel="stylesheet" type="text/css" href="~/css/site.css" />
     <title>@ViewData["Title"]</title>
 </head>
 <body>
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
         <div class="container-fluid">
-            <div class="navbar-brand p-1"><a href="#"><img src="~/img/ToDoistLogo.png" class="rounded" width="50" alt="ToDoist" /></a> </div>
-            <div class="nav-item dropdown">
-                <button class="dropdown-toggle btn btn-dark" role="button" data-bs-toggle="dropdown">Folders</button>
-                <div class="dropdown-menu">
-                    @RenderSection("ToDoFolders", false)
-                </div>
+            <div class="navbar-brand p-1"><a asp-controller="Folder" asp-action="Index"><img src="~/img/ToDoistLogo.png" class="rounded" width="50" alt="ToDoist" /></a></div>
+            <div class="navbar-brand mx-auto text-center"><h1 class=" text-light">Davdoist</h1> </div>
+            <div class="dropdown mr-2">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    Menu
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li><a class="dropdown-item" asp-action="Index" asp-controller="Folder">Folders</a></li>
+                    <li><a class="dropdown-item" asp-action="Index" asp-controller="ToDoTask">ToDoTasks</a></li>
+                    <li><a class="dropdown-item" asp-action="Create" asp-controller="Folder">Create folder</a></li>
+                    <li><a class="dropdown-item" asp-action="Create" asp-controller="ToDoTask">Create task</a></li>
+
+
+                </ul>
             </div>
         </div>
-
     </nav>
-    <main class="container-fluid">
-                @RenderSection("ToDoTasks", false)
-    </main>
+        @RenderBody()
 </body>
 </html>

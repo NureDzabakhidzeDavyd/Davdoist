@@ -7,38 +7,21 @@
     box-sizing: border-box;
 }
 
-/* Style the side navigation */
-.sidenav {
-    height: 100%;
-    width: 200px;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    background-color: #111;
-    overflow-x: hidden;
-}
-
-    .sidenav > div.navbar-brand {
-        padding-bottom: 0em;
-    }
-
-    /* Side navigation links */
-    .sidenav a, .sidenav h3 {
-        color: white;
-        padding: 16px;
-        text-decoration: none;
-        display: block;
-    }
-
-        /* Change color on hover */
-        .sidenav a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-
 /* Style the content */
 .content {
     margin-left: 200px;
     padding-left: 20px;
+}
+
+.task:nth-child(2n){
+    background-color: bisque;
+}
+
+.mr-2 {
+    margin-right: 2rem !important;
+}
+
+form-check-50{
+    width: 75px;
+    height: 75px;
 }

@@ -10,5 +10,7 @@ namespace BLL.Interfaces
         public Folder GetFolderById(int folderId);
 
         public void DeleteFolder(int folderId);
+
+        public IEnumerable<ToDoTask> GetFolderTasks(int folderId);
     }
 }

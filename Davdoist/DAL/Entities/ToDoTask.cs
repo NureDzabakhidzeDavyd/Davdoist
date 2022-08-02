@@ -18,16 +18,14 @@ namespace DAL.Entities
 
         public Priority Priority { get; set; } = Priority.None;
 
-        // If folder doesn't exist - Inbox by default
-        public int FolderId { get; set; } 
-        public Folder Folder { get; set; } 
+        public int? FolderId { get; set; } 
     }
 
     public enum Priority
     {
         None,
         Low,
-        Media,
+        Medium,
         High
     }
 }

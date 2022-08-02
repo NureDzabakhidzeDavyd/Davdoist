@@ -1,0 +1,34 @@
+﻿@model IEnumerable<ToDoTask>
+
+@{
+    ViewData["Title"] = "Create";
+}
+<div class="container-fluid">
+    <div class="row p-3">
+        <div class="col-sm">
+            <form asp-action="Create" asp-controller="Folder">
+                <div class="row my-3">
+                    <div class="col-sm-6 position-relative">
+                        <input type="text" id="Name" class="form-control form-control-lg" placeholder="Folder name" />
+                        <button type="submit" class="btn btn-light btn-lg position-absolute bottom-0 end-50">Create folder</button>
+                    </div>
+                    <div class="col-sm-6">
+                        <select multiple class="form-control" id="Tasks">
+                            @foreach (var item in Model)
+                            {
+                                if (item.FolderId != null)
+                                {
+                                    <option disabled class="border border-1">@item.Header</option>
+                                }
+                                else
+                                {
+                                    <option class="bg-light border border-1">@item.Header</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -15,6 +15,7 @@ namespace PL.Controllers
         public ToDoTaskController(IMapper mapper, IBlTaskServicer blServicer)
         {
             bl = blServicer;
+
             this.mapper = mapper;
             bl.Mapper = this.mapper;
         }

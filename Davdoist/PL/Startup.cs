@@ -26,7 +26,7 @@ namespace PL
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Folder}/{action=Index}/{id?}");
             });
         }
     }
