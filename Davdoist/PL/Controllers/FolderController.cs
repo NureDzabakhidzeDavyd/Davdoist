@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using PL.Models;
 using System.Collections.Generic;
-
+using System.Threading.Tasks;
 
 namespace PL.Controllers
 {
@@ -26,23 +26,23 @@ namespace PL.Controllers
         }
 
         // GET: FoldersController
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            IEnumerable<Folder> folders = mapper.Map<IEnumerable<Folder>>(blFolder.GetFolders());
+            IEnumerable<Folder> folders = mapper.Map<IEnumerable<Folder>>(await blFolder.GetFolders());
             return View(folders);
         }
 
         // GET: FoldersController/Details/5
-        public ActionResult Details(int? folderId)
+        public async Task<ActionResult> Details(int? folderId)
         {
             if (folderId == null)
             {
                 return NotFound();
             }
 
-            Folder folder = mapper.Map<Folder>(blFolder.GetFolderById((int)folderId));
+            Folder folder = mapper.Map<Folder>(await blFolder.GetFolderById((int)folderId));
 
-            IEnumerable<ToDoTask> tasks = mapper.Map<IEnumerable<ToDoTask>>(blFolder.GetFolderTasks((int)folderId));
+            IEnumerable<ToDoTask> tasks = mapper.Map<IEnumerable<ToDoTask>>(await blFolder.GetFolderTasks((int)folderId));
 
             folder.Tasks = tasks.ToList();
 

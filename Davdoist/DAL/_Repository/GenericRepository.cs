@@ -4,6 +4,7 @@ using DAL.Interfaces;
 using DAL.Entities;
 using DAL.Context;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace DAL._Repository
 {
@@ -18,47 +19,36 @@ namespace DAL._Repository
             dBSet = this.context.Set<TEntity>();
         }
 
-        public void Add(TEntity entity)
+        public async Task Add(TEntity entity)
         {
-            dBSet.Add(entity);
+           await dBSet.AddAsync(entity);
         }
 
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
-            var delEntity = dBSet.Find(id);
+            var delEntity = await dBSet.FindAsync(id);
             dBSet.Remove(delEntity);
         }
 
-        public void Delete(TEntity entityToDel)
+        public async Task<IEnumerable<TEntity>> GetAll()
         {
-            if (context.Entry(entityToDel).State == EntityState.Detached)
-            {
-                dBSet.Attach(entityToDel);
-            }
-            dBSet.Remove(entityToDel);
+            return await dBSet.ToListAsync();
         }
 
-        public IEnumerable<TEntity> GetAll()
-        {
-            return dBSet.ToList();
-        }
-
-        public IEnumerable<ToDoTask> GetAllTasksById(int id)
+        public async Task<IEnumerable<ToDoTask>> GetAllTasksById(int id)
         {
             DbSet<ToDoTask> tasks = this.context.ToDoTasks;
-            IEnumerable<ToDoTask> query = from task in tasks where task.FolderId == id select task;
-            return query;
-            
+            return await tasks.Where(x => x.FolderId == id).ToListAsync();
         }
 
-        public TEntity GetById(int id)
+        public async Task<TEntity> GetById(int id)
         {
-          return  dBSet.Find(id);
+          return await dBSet.FindAsync(id);
         }
 
-        public void Update(int id)
+        public async Task Update(int id)
         {
-            var updateEntity = dBSet.Find(id);
+            var updateEntity = await dBSet.FindAsync(id);
             dBSet.Update(updateEntity);
         }
     }

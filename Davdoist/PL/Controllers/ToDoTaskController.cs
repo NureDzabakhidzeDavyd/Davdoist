@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using PL.Models;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PL.Controllers
 {
@@ -25,21 +26,21 @@ namespace PL.Controllers
         }
 
         // GET: ToDoTaskController
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            IEnumerable<ToDoTask> tasks = mapper.Map<IEnumerable<ToDoTask>>(taskBl.GetTasks());
+            IEnumerable<ToDoTask> tasks = mapper.Map<IEnumerable<ToDoTask>>(await taskBl.GetTasks());
             return View(tasks);
         }
 
         // GET: ToDoTaskController/Details/5
-        public ActionResult Details(int? toDoTaskId)
+        public async Task<ActionResult> Details(int? toDoTaskId)
         {
             if (toDoTaskId == null)
             {
                 return NotFound();
             }
 
-            ToDoTask task = mapper.Map<ToDoTask>(taskBl.GetTaskById((int)toDoTaskId));
+            ToDoTask task = mapper.Map<ToDoTask>(await taskBl.GetTaskById((int)toDoTaskId));
 
             if (task == null)
             {
@@ -52,16 +53,16 @@ namespace PL.Controllers
         // TODO: Edit an create one method Create/Edit
 
         // GET: ToDoTaskController/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            IEnumerable<Folder> folders = mapper.Map<IEnumerable<Folder>>(folderBl.GetFolders());
+            IEnumerable<Folder> folders = mapper.Map<IEnumerable<Folder>>(await folderBl.GetFolders());
             return View(folders);
         }
 
         // POST: ToDoTaskController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(ToDoTask toDoTask)
+        public async Task<ActionResult> Create(ToDoTask toDoTask)
         {
             if (ModelState.IsValid)
             {
@@ -80,10 +81,10 @@ namespace PL.Controllers
                     {
                         Folder folder = mapper.Map<Folder>(folderBl.GetFolderById((int)toDoTask.FolderId));
                         folder.Tasks.Add(task);
-                        folderBl.UpdateFolder(folder.Id);
+                        await folderBl.UpdateFolder(folder.Id);
                     }
 
-                    taskBl.CreateTask(mapper.Map<BLL.Entities.ToDoTask>(task));
+                    await taskBl.CreateTask(mapper.Map<BLL.Entities.ToDoTask>(task));
 
                     return RedirectToAction(nameof(Index));
                 }
@@ -133,10 +134,10 @@ namespace PL.Controllers
         // POST: ToDoTaskController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int ToDoTaskId)
+        public async Task<ActionResult> Delete(int ToDoTaskId)
         {
-            BLL.Entities.ToDoTask task = taskBl.GetTaskById(ToDoTaskId);
-            taskBl.Deletetask(task);
+            BLL.Entities.ToDoTask task = await taskBl.GetTaskById(ToDoTaskId);
+            await taskBl.DeleteTask(task.Id);
 
             return RedirectToAction(nameof(Index));
 

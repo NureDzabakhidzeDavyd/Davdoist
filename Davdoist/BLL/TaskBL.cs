@@ -14,39 +14,33 @@ namespace BLL
 
         public IMapper Mapper { get; set; }
 
-        public IEnumerable<ToDoTask> GetTasks()
+        public async Task<IEnumerable<ToDoTask>> GetTasks()
         {
-            var tasks = database.TasksRepository.GetAll();
+            var tasks = await database.TasksRepository.GetAll();
             return Mapper.Map<IEnumerable<ToDoTask>>(tasks);
         }
 
-        public ToDoTask GetTaskById(int taskId)
+        public async Task<ToDoTask> GetTaskById(int taskId)
         {
-            var task = database.TasksRepository.GetById(taskId);
+            var task = await database.TasksRepository.GetById(taskId);
             return Mapper.Map<ToDoTask>(task);
         }
 
-        public void DeleteTask(int taskId)
+        public async Task DeleteTask(int taskId)
         {
-            database.TasksRepository.Delete(taskId);
+           await database.TasksRepository.Delete(taskId);
             database.Save();
         }
 
-        public void CreateTask(ToDoTask task)
+        public async Task CreateTask(ToDoTask task)
         {
-            database.TasksRepository.Add(Mapper.Map<DAL.Entities.ToDoTask>(task));
+            await database.TasksRepository.Add(Mapper.Map<DAL.Entities.ToDoTask>(task));
             database.Save();
         }
 
-        public void Deletetask(ToDoTask task)
+        public async Task UpdateTask(int taskId)
         {
-            database.TasksRepository.Delete(Mapper.Map<DAL.Entities.ToDoTask>(task));
-            database.Save();
-        }
-      
-        public void UpdateTask(int taskId)
-        {
-            database.TasksRepository.Update(taskId);
+            await database.TasksRepository.Update(taskId);
             database.Save();
         }
     }

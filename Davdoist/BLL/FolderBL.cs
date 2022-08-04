@@ -17,39 +17,39 @@ namespace BLL
 
         public IMapper Mapper { get; set; }
 
-        public IEnumerable<ToDoTask> GetFolderTasks(int folderId)
+        public async Task<IEnumerable<ToDoTask>> GetFolderTasks(int folderId)
         {
-            var tasks = database.TasksRepository.GetAllTasksById(folderId);
+            var tasks = await database.TasksRepository.GetAllTasksById(folderId);
             return Mapper.Map<IEnumerable<ToDoTask>>(tasks);
         }
 
-        public IEnumerable<Folder> GetFolders()
+        public async Task<IEnumerable<Folder>> GetFolders()
         {
-            var folders = database.FoldersRepository.GetAll();
+            var folders = await database.FoldersRepository.GetAll();
             return Mapper.Map<IEnumerable<Folder>>(folders);
         }
 
-        public Folder GetFolderById(int folderId)
+        public async Task<Folder> GetFolderById(int folderId)
         {
-            var folder = database.FoldersRepository.GetById(folderId);
+            var folder = await database.FoldersRepository.GetById(folderId);
             return Mapper.Map<Folder>(folder);
         }
 
-        public void DeleteFolder(int folderId)
+        public async Task DeleteFolder(int folderId)
         {
-            database.FoldersRepository.Delete(folderId);
+           await database.FoldersRepository.Delete(folderId);
             database.Save();
         }
 
-        public void CreateFolder(Folder folder)
+        public async Task CreateFolder(Folder folder)
         {
-            database.FoldersRepository.Add(Mapper.Map<DAL.Entities.Folder>(folder));
+           await database.FoldersRepository.Add(Mapper.Map<DAL.Entities.Folder>(folder));
             database.Save();
         }
 
-        public void UpdateFolder(int folderId)
+        public async Task UpdateFolder(int folderId)
         {
-            database.FoldersRepository.Update(folderId);
+           await database.FoldersRepository.Update(folderId);
             database.Save();
         }
     }

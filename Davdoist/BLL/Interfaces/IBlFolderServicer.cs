@@ -1,20 +1,21 @@
 ﻿using BLL.Entities;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BLL.Interfaces
 {
     public interface IBlFolderServicer : IBaseServicer
     {
-        public IEnumerable<Folder> GetFolders();
+        public  Task<IEnumerable<Folder>> GetFolders();
 
-        public Folder GetFolderById(int folderId);
+        public Task<Folder> GetFolderById(int folderId);
 
-        public void DeleteFolder(int folderId);
+        public Task DeleteFolder(int folderId);
 
-        public IEnumerable<ToDoTask> GetFolderTasks(int folderId);
+        public Task<IEnumerable<ToDoTask>> GetFolderTasks(int folderId);
 
-        public void CreateFolder(Folder folder);
+        public Task CreateFolder(Folder folder);
 
-        public void UpdateFolder(int folderId);
+        public Task UpdateFolder(int folderId);
     }
 }
