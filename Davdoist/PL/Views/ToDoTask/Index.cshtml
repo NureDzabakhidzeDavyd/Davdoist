@@ -4,12 +4,65 @@
 
 @model IEnumerable<ToDoTask>
 
+<div class="container-fluid">
+    <div class="row">
+        @{
+            if (Model.Count() == 0)
+            {
+                <div class="col-sm-4 task position-absolute top-50 start-50 translate-middle text-center">
+                    <h2>There are no tasks</h2>
+                </div>
+            }
+        }
+        @foreach (var item in Model)
+        {
+            <div class="col-sm-4 task position-relative">
+                <table class="table-responsive">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <h2>@item.Header</h2>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Description: @item.Description
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @item.Date.Value.ToShortDateString()
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="IsCompleted">Is completed</label>
+                                @{
+                                    if (item.IsCompleted)
+                                    {
+                                        <input type="checkbox" id="IsCompleted" name="IsCompleted" disabled />
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" id="IsCompleted" name="IsCompleted" disabled checked />
 
-@foreach (var item in Model)
-{
-    <h3>@item.Header</h3>
-    <h3>@item.Date</h3>
-    <h3>@item.Description</h3>
-    <h3>@item.IsCompleted</h3>
-    <h3>@item.Priority</h3>
-}
+                                    }
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @item.Priority
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="position-absolute bottom-0 end-0">
+                    <a asp-action="Edit" asp-controller="ToDoTask" class="btn btn-outline-secondary btn-lg" asp-route-folderId="@item.Id">Edit</a>
+                    <a asp-action="Delete" asp-controller="ToDoTask" class="btn btn-outline-secondary btn-lg" asp-route-folderId="@item.Id">Delete</a>
+                </div>
+
+            </div>
+        }
+    </div>
+</div>

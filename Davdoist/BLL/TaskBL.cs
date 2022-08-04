@@ -8,7 +8,7 @@ using DAL;
 
 namespace BLL
 {
-    public class BL : IBlTaskServicer, IBlFolderServicer
+    public class TaskBL : IBlTaskServicer
     {
         private readonly IUnitOfWork database = new UnitOfWork();
 
@@ -18,24 +18,6 @@ namespace BLL
         {
             var tasks = database.TasksRepository.GetAll();
             return Mapper.Map<IEnumerable<ToDoTask>>(tasks);
-        }
-
-        public IEnumerable<ToDoTask> GetFolderTasks(int folderId)
-        {
-            var tasks = database.TasksRepository.GetAllTasksById(folderId);
-            return Mapper.Map<IEnumerable<ToDoTask>>(tasks);
-        }
-
-        public IEnumerable<Folder> GetFolders()
-        {
-            var folders = database.FoldersRepository.GetAll();
-            return Mapper.Map<IEnumerable<Folder>>(folders);
-        }
-
-        public Folder GetFolderById(int folderId)
-        {
-            var folder = database.FoldersRepository.GetById(folderId);
-            return Mapper.Map<Folder>(folder);
         }
 
         public ToDoTask GetTaskById(int taskId)
@@ -50,7 +32,7 @@ namespace BLL
             database.Save();
         }
 
-        public void CreateTask(Task task)
+        public void CreateTask(ToDoTask task)
         {
             database.TasksRepository.Add(Mapper.Map<DAL.Entities.ToDoTask>(task));
             database.Save();
@@ -61,10 +43,10 @@ namespace BLL
             database.TasksRepository.Delete(Mapper.Map<DAL.Entities.ToDoTask>(task));
             database.Save();
         }
-
-        public void DeleteFolder(int folderId)
+      
+        public void UpdateTask(int taskId)
         {
-            database.FoldersRepository.Delete(folderId);
+            database.TasksRepository.Update(taskId);
             database.Save();
         }
     }

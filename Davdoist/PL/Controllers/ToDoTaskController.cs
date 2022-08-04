@@ -3,6 +3,7 @@ using BLL.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PL.Models;
+using System;
 using System.Collections.Generic;
 
 namespace PL.Controllers
@@ -10,20 +11,23 @@ namespace PL.Controllers
     public class ToDoTaskController : Controller
     {
         private readonly IMapper mapper;
-        private readonly IBlTaskServicer bl;
+        private readonly IBlTaskServicer taskBl;
+        private readonly IBlFolderServicer folderBl;
 
-        public ToDoTaskController(IMapper mapper, IBlTaskServicer blServicer)
+        public ToDoTaskController(IMapper mapper, IBlTaskServicer blServicer, IBlFolderServicer blFolder)
         {
-            bl = blServicer;
+            taskBl = blServicer;
+            this.folderBl = blFolder;
 
             this.mapper = mapper;
-            bl.Mapper = this.mapper;
+            folderBl.Mapper = mapper;
+            taskBl.Mapper = this.mapper;
         }
 
         // GET: ToDoTaskController
         public ActionResult Index()
         {
-            IEnumerable<ToDoTask> tasks = mapper.Map<IEnumerable<ToDoTask>>(bl.GetTasks());
+            IEnumerable<ToDoTask> tasks = mapper.Map<IEnumerable<ToDoTask>>(taskBl.GetTasks());
             return View(tasks);
         }
 
@@ -35,7 +39,7 @@ namespace PL.Controllers
                 return NotFound();
             }
 
-            ToDoTask task = mapper.Map<ToDoTask>(bl.GetTaskById((int)toDoTaskId));
+            ToDoTask task = mapper.Map<ToDoTask>(taskBl.GetTaskById((int)toDoTaskId));
 
             if (task == null)
             {
@@ -48,25 +52,47 @@ namespace PL.Controllers
         // TODO: Edit an create one method Create/Edit
 
         // GET: ToDoTaskController/Create
-        public ActionResult Create(ToDoTask task)
+        public ActionResult Create()
         {
-
-            return View();
+            IEnumerable<Folder> folders = mapper.Map<IEnumerable<Folder>>(folderBl.GetFolders());
+            return View(folders);
         }
 
         // POST: ToDoTaskController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(ToDoTask toDoTask)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    ToDoTask task = new ToDoTask()
+                    {
+                        Header = toDoTask.Header,
+                        Description = toDoTask.Description,
+                        Date = toDoTask.Date,
+                        Priority = toDoTask.Priority,
+                        IsCompleted = toDoTask.IsCompleted,
+                        FolderId = toDoTask.FolderId.HasValue ? toDoTask.FolderId.Value : null
+                    };
+                    if (toDoTask.FolderId.HasValue)
+                    {
+                        Folder folder = mapper.Map<Folder>(folderBl.GetFolderById((int)toDoTask.FolderId));
+                        folder.Tasks.Add(task);
+                        folderBl.UpdateFolder(folder.Id);
+                    }
+
+                    taskBl.CreateTask(mapper.Map<BLL.Entities.ToDoTask>(task));
+
+                    return RedirectToAction(nameof(Index));
+                }
+                catch
+                {
+                    return View();
+                }
             }
-            catch
-            {
-                return View();
-            }
+            return View();
         }
 
         // GET: ToDoTaskController/Edit/5
@@ -98,8 +124,8 @@ namespace PL.Controllers
                 return NotFound();
             }
 
-            int taskId = bl.GetTaskById((int)toDoTaskid).Id;
-            bl.DeleteTask(taskId);
+            int taskId = taskBl.GetTaskById((int)toDoTaskid).Id;
+            taskBl.DeleteTask(taskId);
 
             return View();
         }
@@ -109,8 +135,8 @@ namespace PL.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int ToDoTaskId)
         {
-            BLL.Entities.ToDoTask task = bl.GetTaskById(ToDoTaskId);
-            bl.Deletetask(task);
+            BLL.Entities.ToDoTask task = taskBl.GetTaskById(ToDoTaskId);
+            taskBl.Deletetask(task);
 
             return RedirectToAction(nameof(Index));
 

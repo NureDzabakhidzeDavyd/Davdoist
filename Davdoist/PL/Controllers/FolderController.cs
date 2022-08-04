@@ -35,7 +35,7 @@ namespace PL.Controllers
         // GET: FoldersController/Details/5
         public ActionResult Details(int? folderId)
         {
-            if(folderId == null)
+            if (folderId == null)
             {
                 return NotFound();
             }
@@ -52,23 +52,33 @@ namespace PL.Controllers
         // GET: FoldersController/Create
         public ActionResult Create()
         {
-            IEnumerable<ToDoTask> tasks = mapper.Map<IEnumerable<ToDoTask>>(blTask.GetTasks());
-            return View(tasks);
+            return View();
         }
 
         // POST: FoldersController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(IFormCollection form)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    int sdfl = form.Count;
+                    IEnumerable<string> keys = form.Keys;
+                    Folder folder = new Folder()
+                    {
+                        Name = form["Name"]
+                    };
+                    blFolder.CreateFolder(mapper.Map<BLL.Entities.Folder>(folder));
+                    return RedirectToAction(nameof(Index));
+                }
+                catch
+                {
+                    return View();
+                }
             }
-            catch
-            {
-                return View();
-            }
+            return View();
         }
 
         // GET: FoldersController/Edit/5
@@ -95,24 +105,22 @@ namespace PL.Controllers
         // GET: FoldersController/Delete/5
         public ActionResult Delete(int? folderId)
         {
-            if(folderId == null)
-            {
-                return NotFound();
-            }
-
-            int folderDelId = blFolder.GetFolderById((int)folderId).Id;
-            blFolder.DeleteFolder(folderDelId);
-
             return View();
         }
 
         // POST: FoldersController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int? folderId, IFormCollection collection)
         {
+                if (folderId == null)
+                {
+                    return NotFound();
+                }
             try
             {
+
+                int folderDelId = blFolder.GetFolderById((int)folderId).Id;
                 return RedirectToAction(nameof(Index));
             }
             catch

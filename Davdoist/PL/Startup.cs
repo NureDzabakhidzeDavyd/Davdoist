@@ -11,8 +11,8 @@ namespace PL
 
             services.AddAutoMapper(typeof(BLL.AppMappingProfile));
 
-            services.AddTransient<BLL.Interfaces.IBlTaskServicer, BLL.BL>();
-            services.AddTransient<BLL.Interfaces.IBlFolderServicer, BLL.BL>();
+            services.AddTransient<BLL.Interfaces.IBlTaskServicer, BLL.TaskBL>();
+            services.AddTransient<BLL.Interfaces.IBlFolderServicer, BLL.FolderBL>();
         }
 
         public void Configure(IApplicationBuilder app)

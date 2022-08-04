@@ -14,7 +14,8 @@ namespace BLL.Interfaces
 
         public void Deletetask(ToDoTask task);
 
-        public void CreateTask(Task task);
+        public void CreateTask(ToDoTask task);
 
+        public void UpdateTask(int taskId);
     }
 }

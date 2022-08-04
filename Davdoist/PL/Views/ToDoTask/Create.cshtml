@@ -2,33 +2,42 @@
     ViewData["Title"] = "Create ToDoTask";
 }
 
-@model ToDoTask
+@model IEnumerable<Folder>
 
 <div class="container-fluid">
     <div class="row p-3">
         <div class="col-sm">
             <form asp-action="Create" asp-controller="ToDoTask">
                 <div class="row p-3">
-                    <div class="col-sm-6">
-                        <input type="text" class="form-control" placeholder="@Html.DisplayNameFor(task => task.Header)" />
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" name="toDoTask.Header" placeholder="Header" />
                     </div>
-                    <div class="col-sm-6">
-                        <input type="text" class="form-control" placeholder="@Html.DisplayNameFor(task => task.Description)" />
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" name="toDoTask.Description" placeholder="Description" />
+                    </div>
+                    <div class="col-sm-4">
+                        <input type="date" name="toDoTask.Date" class="form-control" min="@DateTime.Now.Year" max="@DateTime.MaxValue" />
                     </div>
                 </div>
                 <div class="row p-3">
                     <div class="col-sm-2 form-check">
-                        <input type="checkbox" value="" class="form-check-input form-check-50" id="IsCompleted" />
-                        <label class="form-check-label h4" for="IsCompleted">@Html.DisplayNameFor(task => task.IsCompleted)</label>
+                        <input type="checkbox" name="toDoTask.IsCompleted" class="form-check-input form-check-50" id="IsCompleted" />
+                        <label class="form-check-label h4" for="IsCompleted">Is completed</label>
                     </div>
                     <div class="col-sm-5">
-                        <input type="date" class="form-control" min="@DateTime.Now.Year" max="@DateTime.MaxValue" />
-                    </div>
-                    <div class="col-sm-5">
-                        <select class="form-control" id="Priority">
+                        <select class="form-control" name="toDoTask.Priority" id="Priority">
                             @foreach (Priority priority in (Priority[])Enum.GetValues(typeof(Priority)))
                             {
-                                <option>@priority</option>
+                                <option value="@((int)priority)">@priority</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-sm-5">
+                        <select class="form-control" name="toDoTask.FolderId" id="Folder">
+                            <option value=@null>None</option>
+                            @foreach (Folder folder in Model)
+                            {
+                                <option value="@folder.Id">@folder.Name</option>
                             }
                         </select>
                     </div>
