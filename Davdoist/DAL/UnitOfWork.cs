@@ -3,6 +3,7 @@ using DAL.Interfaces;
 using DAL.Entities;
 using DAL.Context;
 using DAL._Repository;
+using System.Threading.Tasks;
 
 namespace DAL
 {
@@ -39,9 +40,16 @@ namespace DAL
             }
         }
 
-        public void Save()
+        public async Task Save()
         {
-            context.SaveChanges();
+            try
+            {
+                await context.SaveChangesAsync();
+            }
+            catch
+            {
+                throw;
+            }
         }
 
 

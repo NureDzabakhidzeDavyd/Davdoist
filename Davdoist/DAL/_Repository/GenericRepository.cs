@@ -21,12 +21,28 @@ namespace DAL._Repository
 
         public async Task Add(TEntity entity)
         {
-           await dBSet.AddAsync(entity);
+            await dBSet.AddAsync(entity);
         }
 
         public async Task Delete(int id)
         {
             var delEntity = await dBSet.FindAsync(id);
+
+            if (delEntity.GetType() == typeof(Folder))
+            {
+                Folder folder = delEntity as Folder;
+
+                var tasks = await context.ToDoTasks.Where(x => x.FolderId == folder.Id).ToListAsync();
+
+                foreach (var task in tasks)
+                {
+                    task.FolderId = null;
+                    context.ToDoTasks.Update(task);
+                }
+
+                context.SaveChanges();
+            }
+
             dBSet.Remove(delEntity);
         }
 
@@ -43,13 +59,12 @@ namespace DAL._Repository
 
         public async Task<TEntity> GetById(int id)
         {
-          return await dBSet.FindAsync(id);
+            return await dBSet.FindAsync(id);
         }
 
-        public async Task Update(int id)
+        public void Update(TEntity entity)
         {
-            var updateEntity = await dBSet.FindAsync(id);
-            dBSet.Update(updateEntity);
+            dBSet.Update(entity);
         }
     }
 }

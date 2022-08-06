@@ -16,6 +16,6 @@ namespace BLL.Interfaces
 
         public Task CreateFolder(Folder folder);
 
-        public Task UpdateFolder(int folderId);
+        public Task UpdateFolder(Folder folder);
     }
 }

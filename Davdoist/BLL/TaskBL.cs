@@ -29,19 +29,19 @@ namespace BLL
         public async Task DeleteTask(int taskId)
         {
            await database.TasksRepository.Delete(taskId);
-            database.Save();
+            await database.Save();
         }
 
         public async Task CreateTask(ToDoTask task)
         {
             await database.TasksRepository.Add(Mapper.Map<DAL.Entities.ToDoTask>(task));
-            database.Save();
+            await database.Save();
         }
 
-        public async Task UpdateTask(int taskId)
+        public async Task UpdateTask(ToDoTask task)
         {
-            await database.TasksRepository.Update(taskId);
-            database.Save();
+            database.TasksRepository.Update(Mapper.Map<DAL.Entities.ToDoTask>(task));
+            await database.Save();
         }
     }
 }

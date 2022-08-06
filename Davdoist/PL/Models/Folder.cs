@@ -10,7 +10,5 @@ namespace PL.Models
         [Required(ErrorMessage = "Write folder name")]
         [Range(1,15, ErrorMessage = "Write folder size btw 1 and 15")]
         public string Name { get; set; }
-
-        public List<ToDoTask> Tasks { get; set; } = new List<ToDoTask>();
     }
 }

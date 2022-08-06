@@ -38,19 +38,20 @@ namespace BLL
         public async Task DeleteFolder(int folderId)
         {
            await database.FoldersRepository.Delete(folderId);
-            database.Save();
+
+           await  database.Save();
         }
 
         public async Task CreateFolder(Folder folder)
         {
            await database.FoldersRepository.Add(Mapper.Map<DAL.Entities.Folder>(folder));
-            database.Save();
+            await database.Save();
         }
 
-        public async Task UpdateFolder(int folderId)
+        public async Task UpdateFolder(Folder folder)
         {
-           await database.FoldersRepository.Update(folderId);
-            database.Save();
+           database.FoldersRepository.Update(Mapper.Map<DAL.Entities.Folder>(folder));
+           await database.Save();
         }
     }
 }

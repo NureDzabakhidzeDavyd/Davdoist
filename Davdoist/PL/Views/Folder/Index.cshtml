@@ -26,13 +26,13 @@
                             @Html.DisplayFor(modelItem => item.Name)
                         </th>
                         <td>
-                            <a asp-action="AddOrEdit" class="btn btn-outline-primary" asp-route-folderId="@item.Id">Edit</a>
+                            <a asp-action="Edit" asp-controller="Folder" class="btn btn-outline-primary" asp-route-folderId="@item.Id">Edit</a>
                         </td>
                         <td>
                             <a asp-action="Details" class="btn btn-outline-info" asp-route-folderId="@item.Id">Details</a>
                         </td>
                         <td>
-                            <a asp-action="Delete" asp-controller="Folder" class="btn btn-outline-danger" asp-route-folderId="@item.Id">Delete</a>
+                            <a asp-action="Delete" asp-controller="Folder" class="btn btn-outline-danger" asp-route-taskId="@item.Id">Delete</a>
                         </td>
                     </tr>
                 }

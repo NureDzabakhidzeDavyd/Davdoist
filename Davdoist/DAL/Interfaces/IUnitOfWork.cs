@@ -1,6 +1,7 @@
 ﻿using DAL._Repository;
 using DAL.Entities;
 using System;
+using System.Threading.Tasks;
 
 namespace DAL.Interfaces
 {
@@ -10,6 +11,6 @@ namespace DAL.Interfaces
 
         public GenericRepository<Folder> FoldersRepository { get; }
 
-        public void Save();
+        public Task Save();
     }
 }

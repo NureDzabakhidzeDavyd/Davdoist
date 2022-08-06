@@ -6,6 +6,8 @@ using System.Linq;
 using PL.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace PL.Controllers
 {
@@ -40,37 +42,44 @@ namespace PL.Controllers
                 return NotFound();
             }
 
+            List<Folder> folders = new List<Folder>();
             Folder folder = mapper.Map<Folder>(await blFolder.GetFolderById((int)folderId));
+            folders.Add(folder);
 
             IEnumerable<ToDoTask> tasks = mapper.Map<IEnumerable<ToDoTask>>(await blFolder.GetFolderTasks((int)folderId));
 
-            folder.Tasks = tasks.ToList();
+            PL.ViewModels.TaskAndFolder taskAndFolder = new ViewModels.TaskAndFolder()
+            {
+                Folders = folders,
+                Tasks = tasks
+            };
 
-            return View(folder);
+            return View(taskAndFolder);
         }
 
         // GET: FoldersController/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            return View();
+            IEnumerable<ToDoTask> tasks = mapper.Map<IEnumerable<ToDoTask>>(await blTask.GetTasks()).Where(task => task.FolderId == null);
+            return View(tasks);
         }
 
         // POST: FoldersController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection form)
+        public async Task<ActionResult> Create(IFormCollection form)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    int sdfl = form.Count;
-                    IEnumerable<string> keys = form.Keys;
                     Folder folder = new Folder()
                     {
                         Name = form["Name"]
                     };
-                    blFolder.CreateFolder(mapper.Map<BLL.Entities.Folder>(folder));
+
+                   await blFolder.CreateFolder(mapper.Map<BLL.Entities.Folder>(folder));
+
                     return RedirectToAction(nameof(Index));
                 }
                 catch
@@ -82,18 +91,22 @@ namespace PL.Controllers
         }
 
         // GET: FoldersController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int folderId)
         {
-            return View();
+            Folder folder = mapper.Map<Folder>(await blFolder.GetFolderById(folderId));
+
+            return View(folder);
         }
 
         // POST: FoldersController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(Folder folder)
         {
             try
             {
+                await blFolder.UpdateFolder(mapper.Map<BLL.Entities.Folder>(folder));
+
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -103,15 +116,27 @@ namespace PL.Controllers
         }
 
         // GET: FoldersController/Delete/5
-        public ActionResult Delete(int? folderId)
+        public async Task<ActionResult> Delete(int? folderId)
         {
-            return View();
+            if(folderId == null)
+            {
+                return NotFound();
+            }
+
+            Folder folder = mapper.Map<Folder>(await blFolder.GetFolderById((int)folderId));
+
+            if(folder == null)
+            {
+                return NotFound();
+            }
+
+            return View(folder);
         }
 
         // POST: FoldersController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int? folderId, IFormCollection collection)
+        public async Task<ActionResult> Delete(int? folderId, IFormCollection collection)
         {
                 if (folderId == null)
                 {
@@ -120,7 +145,15 @@ namespace PL.Controllers
             try
             {
 
-                int folderDelId = blFolder.GetFolderById((int)folderId).Id;
+                int? folderDelId = mapper.Map<Folder>(await blFolder.GetFolderById((int)folderId)).Id;
+
+                if(folderDelId == null)
+                {
+                    return NotFound();
+                }
+
+                await blFolder.DeleteFolder((int)folderDelId);
+
                 return RedirectToAction(nameof(Index));
             }
             catch

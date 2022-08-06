@@ -13,6 +13,6 @@ namespace DAL.Interfaces
 
         public Task Add(T entity);
 
-        public Task Update(int id);
+        public void Update(T entity);
     }
 }

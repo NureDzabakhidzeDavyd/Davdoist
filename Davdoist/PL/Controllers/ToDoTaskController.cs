@@ -50,8 +50,6 @@ namespace PL.Controllers
             return View(task);
         }
 
-        // TODO: Edit an create one method Create/Edit
-
         // GET: ToDoTaskController/Create
         public async Task<ActionResult> Create()
         {
@@ -68,6 +66,7 @@ namespace PL.Controllers
             {
                 try
                 {
+                    // TODO: Add folderId/Folder to see where he's contains
                     ToDoTask task = new ToDoTask()
                     {
                         Header = toDoTask.Header,
@@ -77,12 +76,6 @@ namespace PL.Controllers
                         IsCompleted = toDoTask.IsCompleted,
                         FolderId = toDoTask.FolderId.HasValue ? toDoTask.FolderId.Value : null
                     };
-                    if (toDoTask.FolderId.HasValue)
-                    {
-                        Folder folder = mapper.Map<Folder>(folderBl.GetFolderById((int)toDoTask.FolderId));
-                        folder.Tasks.Add(task);
-                        await folderBl.UpdateFolder(folder.Id);
-                    }
 
                     await taskBl.CreateTask(mapper.Map<BLL.Entities.ToDoTask>(task));
 
@@ -97,10 +90,11 @@ namespace PL.Controllers
         }
 
         // GET: ToDoTaskController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
+        //public async Task<ActionResult> Edit(int id)
+        //{
+
+        //    return  View();
+        //}
 
         // POST: ToDoTaskController/Edit/5
         [HttpPost]
