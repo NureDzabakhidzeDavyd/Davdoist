@@ -11,8 +11,8 @@
                     <div class="row my-3">
                         <div class="col-sm-6 position-relative">
                             <label asp-for="Name"></label>
-                            <input asp-for="Name" placeholder="@Model.Name"/>
-                            <input hidden asp-for="Id" value="@Model.Id" />
+                            <input asp-for="Name" placeholder="@ViewBag.Folder.Name"/>
+                            <input hidden asp-for="Id" value="@ViewBag.Folder.Id" />
                         </div>
                         <div class="col-sm-6">
                             <button type="submit" class="btn btn-light btn-lg">Edit folder</button>

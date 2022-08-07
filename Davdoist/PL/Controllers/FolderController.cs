@@ -93,9 +93,9 @@ namespace PL.Controllers
         // GET: FoldersController/Edit/5
         public async Task<ActionResult> Edit(int folderId)
         {
-            Folder folder = mapper.Map<Folder>(await blFolder.GetFolderById(folderId));
+            ViewBag.Folder = mapper.Map<Folder>(await blFolder.GetFolderById(folderId));
 
-            return View(folder);
+            return View();
         }
 
         // POST: FoldersController/Edit/5

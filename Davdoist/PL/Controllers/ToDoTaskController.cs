@@ -89,52 +89,94 @@ namespace PL.Controllers
             return View();
         }
 
-        // GET: ToDoTaskController/Edit/5
-        //public async Task<ActionResult> Edit(int id)
-        //{
+        //GET: ToDoTaskController/Edit/5
+        public async Task<ActionResult> Edit(int taskId)
+        {
+            ViewBag.Folders = mapper.Map<IEnumerable<Folder>>(await folderBl.GetFolders());
 
-        //    return  View();
-        //}
+            ToDoTask toDoTask = mapper.Map<ToDoTask>(await taskBl.GetTaskById(taskId));
+
+            return View(toDoTask);
+        }
 
         // POST: ToDoTaskController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(int taskId, ToDoTask toDoTask)
         {
-            try
+            // TODO: передать в таксАйди айди с представления
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    ToDoTask task = mapper.Map<ToDoTask>(await taskBl.GetTaskById(taskId));
+
+                    task.Header = toDoTask.Header;
+                    task.FolderId = toDoTask.FolderId;
+                    task.Description = toDoTask.Description;
+                    task.Date = toDoTask.Date;
+                    task.Priority = toDoTask.Priority;
+                    task.IsCompleted = toDoTask.IsCompleted;
+
+                    await taskBl.UpdateTask(mapper.Map<BLL.Entities.ToDoTask>(task));
+
+                    return RedirectToAction(nameof(Index));
+                }
+                catch
+                {
+                    return View();
+                }
             }
-            catch
-            {
-                return View();
-            }
+
+            return View();
+
         }
 
         // GET: ToDoTaskController/Delete/5
-        public ActionResult Delete(int? toDoTaskid)
+        public async Task<ActionResult> Delete(int? taskId)
         {
-            if (toDoTaskid == null)
+            if (taskId == null)
             {
                 return NotFound();
             }
 
-            int taskId = taskBl.GetTaskById((int)toDoTaskid).Id;
-            taskBl.DeleteTask(taskId);
+            ToDoTask toDoTask = mapper.Map<ToDoTask>(await taskBl.GetTaskById((int)taskId));
 
-            return View();
+            if (toDoTask == null)
+            {
+                return NotFound();
+            }
+
+            return View(toDoTask);
         }
 
         // POST: ToDoTaskController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete(int ToDoTaskId)
+        public async Task<ActionResult> Delete(int taskId)
         {
-            BLL.Entities.ToDoTask task = await taskBl.GetTaskById(ToDoTaskId);
-            await taskBl.DeleteTask(task.Id);
+            try
+            {
+                BLL.Entities.ToDoTask task = await taskBl.GetTaskById(taskId);
+
+                if (task == null)
+                {
+                    throw new NullReferenceException();
+                }
+
+                await taskBl.DeleteTask(task.Id);
+            }
+            catch (NullReferenceException)
+            {
+                NotFound();
+            }
+            catch (Exception)
+            {
+                NoContent();
+            }
+
 
             return RedirectToAction(nameof(Index));
-
         }
     }
 }
