@@ -29,6 +29,16 @@ namespace PL.Controllers
         public async Task<ActionResult> Index()
         {
             IEnumerable<ToDoTask> tasks = mapper.Map<IEnumerable<ToDoTask>>(await taskBl.GetTasks());
+
+            foreach (var task in tasks)
+            {
+                if(task.FolderId != null)
+                {
+                string folderName = (await folderBl.GetFolderById((int)task.FolderId)).Name;
+                ViewData[$"{task.Header}"] = folderName ?? "None";
+                }
+            }
+
             return View(tasks);
         }
 
@@ -54,6 +64,7 @@ namespace PL.Controllers
         public async Task<ActionResult> Create()
         {
             IEnumerable<Folder> folders = mapper.Map<IEnumerable<Folder>>(await folderBl.GetFolders());
+
             return View(folders);
         }
 
@@ -102,30 +113,20 @@ namespace PL.Controllers
         // POST: ToDoTaskController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(int taskId, ToDoTask toDoTask)
+        public async Task<ActionResult> Edit( ToDoTask toDoTask)
         {
-            // TODO: передать в таксАйди айди с представления
             if (ModelState.IsValid)
             {
                 try
-                {
-                    ToDoTask task = mapper.Map<ToDoTask>(await taskBl.GetTaskById(taskId));
+            {
+                await taskBl.UpdateTask(mapper.Map<BLL.Entities.ToDoTask>(toDoTask));
 
-                    task.Header = toDoTask.Header;
-                    task.FolderId = toDoTask.FolderId;
-                    task.Description = toDoTask.Description;
-                    task.Date = toDoTask.Date;
-                    task.Priority = toDoTask.Priority;
-                    task.IsCompleted = toDoTask.IsCompleted;
-
-                    await taskBl.UpdateTask(mapper.Map<BLL.Entities.ToDoTask>(task));
-
-                    return RedirectToAction(nameof(Index));
-                }
-                catch
-                {
-                    return View();
-                }
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
             }
 
             return View();
@@ -177,6 +178,11 @@ namespace PL.Controllers
 
 
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<string> GetFolderName(int folderId)
+        {
+            return (await folderBl.GetFolderById(folderId)).Name;
         }
     }
 }

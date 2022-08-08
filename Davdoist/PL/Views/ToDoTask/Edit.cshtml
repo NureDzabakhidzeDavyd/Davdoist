@@ -7,28 +7,37 @@
 <div class="container-fluid">
     <div class="row p-3">
         <div class="col-sm">
-            <form asp-action="Edit" asp-controller="ToDoTask" asp-route-taskId="@Model.Id">
+            <form asp-action="Edit" asp-controller="ToDoTask">
                 <div class="row p-3">
                     <div class="col-sm-4">
                         <input type="text" class="form-control" name="Header" value="@Model.Header" />
+                        <input hidden asp-for="Id" value="@Model.Id" />
                     </div>
                     <div class="col-sm-4">
                         <input type="text" class="form-control" name="Description" value="@Model.Description" />
                     </div>
                     <div class="col-sm-4">
-                        <input type="date" name="toDoTask.Date" class="form-control" min="@DateTime.Now.Year" max="@DateTime.MaxValue" placeholder="@Model.Date" />
+                        <input asp-for="Date" name="Date" class="form-control" />
                     </div>
                 </div>
                 <div class="row p-3">
                     <div class="col-sm-2 form-check">
-                        <input type="checkbox" name="IsCompleted" value="@Model.IsCompleted" class="form-check-input form-check-50" id="IsCompleted" />
+                        <input asp-for="IsCompleted" name="IsCompleted" class="form-check-input form-check-50" id="IsCompleted" />
                         <label class="form-check-label h4" for="IsCompleted">Is completed</label>
                     </div>
                     <div class="col-sm-5">
                         <select class="form-control" name="Priority" id="Priority">
                             @foreach (Priority priority in (Priority[])Enum.GetValues(typeof(Priority)))
                             {
-                                <option value="@((int)priority)">@priority</option>
+                                @if (Model.Priority == priority)
+                                {
+                                    <option value="@((int)priority)" selected>@priority</option>
+
+                                }
+                                else
+                                {
+                                    <option value="@((int)priority)">@priority</option>
+                                }
                             }
                         </select>
                     </div>
@@ -37,14 +46,21 @@
                             <option value=@null>None</option>
                             @foreach (Folder folder in ViewBag.Folders)
                             {
-                                <option value="@folder.Id">@folder.Name</option>
+                                if (folder.Id == Model.FolderId)
+                                {
+                                    <option selected value="@folder.Id">@folder.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@folder.Id">@folder.Name</option>
+                                }
                             }
                         </select>
                     </div>
                 </div>
                 <div class="row p-3">
                     <div class="col-sm">
-                        <button type="submit" class="btn btn-light btn-lg">Create task</button>
+                        <button type="submit" class="btn btn-light btn-lg">Edit task</button>
                     </div>
                 </div>
             </form>

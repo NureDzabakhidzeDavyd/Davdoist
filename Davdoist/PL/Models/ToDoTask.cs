@@ -23,6 +23,7 @@ namespace PL.Models
         [Display(Name = "Priority")]
         public Priority Priority { get; set; } = Priority.None;
 
+        [Display(Name = "Folder: ")]
         public int? FolderId { get; set; }
     }
 
